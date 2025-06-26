@@ -232,7 +232,7 @@ namespace GymReceptionApp.ViewModels
 
                 HandleMemberDataChange(); // Save member changes and refresh UI
                 IsPaymentPopupOpen = false; // Close popup
-                MessageBox.Show($"{SelectedMemberForPayment.FullName} has successfully subscribed to the {plan.Name}.", "Payment Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"{plan.Name} uspešno uplaćeno za {SelectedMemberForPayment.FullName}.", "Uspešno plaćanje", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
         #endregion
@@ -270,7 +270,7 @@ namespace GymReceptionApp.ViewModels
         {
             if (string.IsNullOrWhiteSpace(NewMemberFullName))
             {
-                MessageBox.Show("Member name cannot be empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Ime člana ne može biti prazno!", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             int newId = _allMembers.Any() ? _allMembers.Max(m => m.Id) + 1 : 101;
@@ -283,7 +283,7 @@ namespace GymReceptionApp.ViewModels
             };
             _allMembers.Add(newMember);
             HandleMemberDataChange();
-            MessageBox.Show($"Member '{newMember.FullName}' added successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Član '{newMember.FullName}' uspešno dodat/a", "Uspešno dodavanje", MessageBoxButton.OK, MessageBoxImage.Information);
             IsAddMemberPopupOpen = false;
         }
 
@@ -303,7 +303,7 @@ namespace GymReceptionApp.ViewModels
                 IsDebtPopupOpen = false;
                 HandleMemberDataChange();
             }
-            else { MessageBox.Show("Please enter a valid value for the debt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+            else { MessageBox.Show("Molim vas unesite decimalnu vrednost za dug.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
         private void ClearDebt(object parameter)
         {
@@ -312,7 +312,7 @@ namespace GymReceptionApp.ViewModels
                 SelectedMemberForDebt.Debt = 0;
                 IsDebtPopupOpen = false;
                 HandleMemberDataChange();
-                MessageBox.Show($"Debt for member {SelectedMemberForDebt.FullName} has been cleared.", "Debt Cleared", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Obrisan dug za člana {SelectedMemberForDebt.FullName}.", "Obrisan dug", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

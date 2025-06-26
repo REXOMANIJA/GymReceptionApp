@@ -9,7 +9,7 @@
                  xmlns:converters="clr-namespace:GymReceptionApp.Converters"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  mc:Ignorable="d"
-                 Title="Gym Reception" Height="700" Width="900" WindowStartupLocation="CenterScreen"
+                 Title="Workout Trening Centar" Height="700" Width="900" WindowStartupLocation="CenterScreen"
                  TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto"
                   WindowTitleBrush="{DynamicResource MahApps.Brushes.Window.Background}"
                  NonActiveWindowTitleBrush="{DynamicResource MahApps.Brushes.Window.Background}"
@@ -48,10 +48,10 @@
             <TextBox Grid.Column="0" FontSize="16"
                      Style="{StaticResource SearchBoxStyle}"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Tag="Search by ID or Name..."/>
+                     Tag="Pretraži po imenu ili članskom broju..."/>
 
             <Button Grid.Column="1" 
-                    Content="Add Member"
+                    Content="Novi član"
                     Style="{StaticResource AccentButton}"
                     Command="{Binding OpenAddMemberPopupCommand}"
                     Margin="10,0,0,0"/>
@@ -119,11 +119,11 @@
                             <TextBlock Grid.Column="2" Text="{Binding FullName}" FontSize="16" Margin="10,0" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
                             
                             <Button Grid.Column="3" Style="{StaticResource CardButton}"
-                                    Width="130"
+                                    Width="200"
                                     HorizontalContentAlignment="Left"
                                     FontSize="16"
                                     Content="{Binding Debt}"
-                                    ContentStringFormat="Debt: {0:C}"
+                                    ContentStringFormat='Dug: {0:N2} RSD'
                                     Foreground="{StaticResource PrimaryTextBrush}"
                                     Command="{Binding DataContext.OpenDebtPopupCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                     CommandParameter="{Binding}"/>
@@ -183,16 +183,16 @@
                     <DropShadowEffect BlurRadius="15" ShadowDepth="0" Opacity="0.8" Color="Black"/>
                 </Border.Effect>
                 <StackPanel>
-                    <TextBlock Text="Add New Member" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"
+                    <TextBlock Text="Dodaj novog člana" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"
                                Foreground="{StaticResource GymGoldBrush}"/>
-                    <TextBlock Text="Full Name:" Foreground="{StaticResource SecondaryTextBrush}" Margin="0,0,0,5"/>
+                    <TextBlock Text="Ime i Prezime:" Foreground="{StaticResource SecondaryTextBrush}" Margin="0,0,0,5"/>
                     <TextBox Margin="0,5" FontSize="16" Style="{StaticResource SearchBoxStyle}"
                              Text="{Binding NewMemberFullName, UpdateSourceTrigger=PropertyChanged}"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-                        <Button Content="Add Member" Margin="0,0,10,0" IsDefault="True"
+                        <Button Content="Dodaj" Margin="0,0,10,0" IsDefault="True"
                                 Style="{StaticResource AccentButton}"
                                 Command="{Binding ConfirmAddMemberCommand}"/>
-                        <Button Content="Cancel" IsCancel="True"
+                        <Button Content="Otkaži" IsCancel="True"
                                 Style="{StaticResource SecondaryButton}"
                                 Command="{Binding CancelAddMemberCommand}"/>
                     </StackPanel>
@@ -208,7 +208,7 @@
                     <DropShadowEffect BlurRadius="15" ShadowDepth="0" Opacity="0.8" Color="Black"/>
                 </Border.Effect>
                 <StackPanel>
-                    <TextBlock Text="Select Payment Plan" FontSize="20" FontWeight="Bold" Margin="0,0,0,5" Foreground="{StaticResource GymGoldBrush}"/>
+                    <TextBlock Text="Izaberite plan za uplatu" FontSize="20" FontWeight="Bold" Margin="0,0,0,5" Foreground="{StaticResource GymGoldBrush}"/>
                     <TextBlock Text="{Binding SelectedMemberForPayment.FullName}" FontSize="16" Margin="0,0,0,15" Foreground="{StaticResource SecondaryTextBrush}"/>
 
                     <!-- This ItemsControl will list all available plans -->
@@ -220,7 +220,7 @@
                                         CommandParameter="{Binding}">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding Name}" FontWeight="Bold" MinWidth="120"/>
-                                        <TextBlock Text="{Binding Appointments, StringFormat='{}{0} Appointments'}" Margin="15,0" MinWidth="130"/>
+                                        <TextBlock Text="{Binding Appointments, StringFormat='{}{0} Termina'}" Margin="15,0" MinWidth="130"/>
                                         <TextBlock Text="{Binding Price, StringFormat={}{0:C0}, ConverterCulture=sr-RS}" FontWeight="SemiBold"/>
                                     </StackPanel>
                                 </Button>
@@ -228,7 +228,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
-                    <Button Content="Cancel" Margin="0,20,0,0" HorizontalAlignment="Right"
+                    <Button Content="Otkaži" Margin="0,20,0,0" HorizontalAlignment="Right"
                             Style="{StaticResource SecondaryButton}"
                             Command="{Binding CancelPaymentPopupCommand}"/>
                 </StackPanel>

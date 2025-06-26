@@ -1,4 +1,4 @@
-<!-- FILE: Views/MemberInfoWindow.xaml -->
+﻿<!-- FILE: Views/MemberInfoWindow.xaml -->
 <mah:MetroWindow x:Class="GymReceptionApp.Views.MemberInfoWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -140,13 +140,13 @@
 
     <!-- Day of Week Headers -->
     <UniformGrid Grid.Row="1" Rows="1" Columns="7" Margin="0,5">
-      <TextBlock Text="Sun" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
-      <TextBlock Text="Mon" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
-      <TextBlock Text="Tue" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="center"/>
-      <TextBlock Text="Wed" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
-      <TextBlock Text="Thu" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
-      <TextBlock Text="Fri" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
-      <TextBlock Text="Sat" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Ned" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Pon" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Uto" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="center"/>
+      <TextBlock Text="Sre" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Čet" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Pet" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Sub" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
     </UniformGrid>
 
     <!-- Calendar Days -->
@@ -164,7 +164,7 @@
                   Tag="{Binding DataContext, ElementName=CalendarItemsControl}">
             <Button.ContextMenu>
               <ContextMenu>
-                <MenuItem Header="Checked In" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                <MenuItem Header="Dolazak" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
                   <MenuItem.CommandParameter>
                     <MultiBinding Converter="{StaticResource MultiParamConverter}">
                       <Binding Path="."/>
@@ -172,7 +172,7 @@
                     </MultiBinding>
                   </MenuItem.CommandParameter>
                 </MenuItem>
-                <MenuItem Header="Pay Day" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                <MenuItem Header="Uplata" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
                   <MenuItem.CommandParameter>
                     <MultiBinding Converter="{StaticResource MultiParamConverter}">
                       <Binding Path="."/>
@@ -180,7 +180,7 @@
                     </MultiBinding>
                   </MenuItem.CommandParameter>
                 </MenuItem>
-                <MenuItem Header="Paid and Checked In" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                <MenuItem Header="Uplata i dolazak" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
                   <MenuItem.CommandParameter>
                     <MultiBinding Converter="{StaticResource MultiParamConverter}">
                       <Binding Path="."/>
@@ -188,7 +188,7 @@
                     </MultiBinding>
                   </MenuItem.CommandParameter>
                 </MenuItem>
-                <MenuItem Header="Debt Day" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                <MenuItem Header="Dolazak na dug" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
                   <MenuItem.CommandParameter>
                     <MultiBinding Converter="{StaticResource MultiParamConverter}">
                       <Binding Path="."/>
@@ -197,7 +197,7 @@
                   </MenuItem.CommandParameter>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Clear" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                <MenuItem Header="Otkaži" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
                   <MenuItem.CommandParameter>
                     <MultiBinding Converter="{StaticResource MultiParamConverter}">
                       <Binding Path="."/>
