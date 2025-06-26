@@ -1,0 +1,238 @@
+﻿<!-- FILE: Views/MainWindow.xaml -->
+<mah:MetroWindow x:Class="GymReceptionApp.Views.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:viewModels="clr-namespace:GymReceptionApp.ViewModels"
+                 xmlns:converters="clr-namespace:GymReceptionApp.Converters"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 mc:Ignorable="d"
+                 Title="Gym Reception" Height="700" Width="900" WindowStartupLocation="CenterScreen"
+                 TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto"
+                  WindowTitleBrush="{DynamicResource MahApps.Brushes.Window.Background}"
+                 NonActiveWindowTitleBrush="{DynamicResource MahApps.Brushes.Window.Background}"
+                 BorderBrush="Transparent"
+                 BorderThickness="0"
+                 ResizeBorderThickness="10"
+                 GlowBrush="{StaticResource GymGoldBrush}"
+                 TitleForeground="{StaticResource PrimaryTextBrush}"
+                 TitleCharacterCasing="Normal">
+    <Window.DataContext>
+        <viewModels:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <converters:AppointmentsToBrushConverter x:Key="AppointmentsToBrushConverter"/>
+        <Style TargetType="Button" x:Key="CardButton" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="MinWidth" Value="50"/>
+            <Setter Property="Padding" Value="12, 8"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0" Margin="15,15,15,0" MaxWidth="1000px">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0" FontSize="16"
+                     Style="{StaticResource SearchBoxStyle}"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="Search by ID or Name..."/>
+
+            <Button Grid.Column="1" 
+                    Content="Add Member"
+                    Style="{StaticResource AccentButton}"
+                    Command="{Binding OpenAddMemberPopupCommand}"
+                    Margin="10,0,0,0"/>
+        </Grid>
+
+        <!-- CHANGE: Corrected margin to fix the inner border issue -->
+        <ListBox Grid.Row="1" ItemsSource="{Binding FilteredMembers}" 
+                 HorizontalContentAlignment="Stretch" Margin="15,15,15,15" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 Background="Transparent" BorderThickness="0"
+                 MaxWidth="1000px">
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border x:Name="CardBorder" Background="{StaticResource SecondaryBackgroundBrush}" 
+                            BorderBrush="{StaticResource BorderBrush}" 
+                            BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,6">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Effect" Value="{x:Null}"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect ShadowDepth="0" Color="{StaticResource GymGoldColor}" Opacity="0.6" BlurRadius="20"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>      <!-- ID -->
+                                <ColumnDefinition Width="Auto"/>      <!-- Info Button -->
+                                <ColumnDefinition Width="*" MinWidth="150"/> <!-- Name -->
+                                <ColumnDefinition Width="Auto"/>      <!-- Debt Button -->
+                                <ColumnDefinition Width="Auto"/>      <!-- Pay Button -->
+                                <ColumnDefinition Width="Auto"/>      <!-- Appointments Button -->
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Grid.Column="0" Text="{Binding Id}" FontWeight="Bold" Foreground="{StaticResource GymGoldBrush}" FontSize="18" VerticalAlignment="Center"/>
+                            
+                            <Button Grid.Column="1" Style="{StaticResource CardButton}"
+                                    Background="Transparent" BorderBrush="Transparent"
+                                    Margin="15,0,10,0"
+                                    Command="{Binding DataContext.OpenInfoCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                    CommandParameter="{Binding}">
+                                <iconPacks:PackIconMaterial Kind="InformationOutline" Width="22" Height="22" VerticalAlignment="Center" Foreground="{StaticResource GymGoldBrush}"/>
+                            </Button>
+                            
+                            <TextBlock Grid.Column="2" Text="{Binding FullName}" FontSize="16" Margin="10,0" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                            
+                            <Button Grid.Column="3" Style="{StaticResource CardButton}"
+                                    Width="130"
+                                    HorizontalContentAlignment="Left"
+                                    FontSize="16"
+                                    Content="{Binding Debt}"
+                                    ContentStringFormat="Debt: {0:C}"
+                                    Foreground="{StaticResource PrimaryTextBrush}"
+                                    Command="{Binding DataContext.OpenDebtPopupCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                    CommandParameter="{Binding}"/>
+
+                            <Button Grid.Column="4" Content="$" Style="{StaticResource CardButton}" FontSize="20" FontWeight="Bold"
+                                    Command="{Binding DataContext.OpenPaymentPopupCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                    CommandParameter="{Binding}"/>
+
+                            <Button Grid.Column="5" Style="{StaticResource CardButton}"
+                                    Command="{Binding DataContext.HandleAppointmentClickCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                    CommandParameter="{Binding}">
+                                <Button.Content>
+                                    <TextBlock Text="{Binding Appointments}" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}" FontSize="16"/>
+                                </Button.Content>
+                                
+                                <Button.Background>
+                                    <MultiBinding Converter="{StaticResource AppointmentsToBrushConverter}">
+                                        <Binding Path="ActivityLog" />
+                                        <Binding Path="Appointments" />
+                                    </MultiBinding>
+                                </Button.Background>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <!-- The Popup remains unchanged -->
+        <Popup IsOpen="{Binding IsDebtPopupOpen}" StaysOpen="False" Placement="Center" AllowsTransparency="True">
+            <Border BorderBrush="{StaticResource GymGoldBrush}" BorderThickness="2" 
+                    Background="{StaticResource PrimaryBackgroundBrush}" CornerRadius="8" 
+                    Padding="25" MinWidth="300">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="0" Opacity="0.8" Color="Black"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="Update Debt" FontSize="20" FontWeight="Bold" Margin="0,0,0,15" Foreground="{StaticResource GymGoldBrush}"/>
+                    <TextBlock Text="{Binding SelectedMemberForDebt.FullName}" FontSize="16" Margin="0,0,0,10" Foreground="{StaticResource SecondaryTextBrush}"/>
+                    <TextBox Margin="0,5" FontSize="16" Style="{StaticResource SearchBoxStyle}" Text="{Binding NewDebtValue, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                        <!-- NEW: Button to clear debt to zero -->
+                        <Button Content="Clear Debt" Margin="0,0,10,0" Style="{StaticResource SecondaryButton}" Command="{Binding ClearDebtCommand}"/>
+                        <Button Content="Update" Margin="0,0,10,0" IsDefault="True" Style="{StaticResource AccentButton}" Command="{Binding ConfirmDebtUpdateCommand}"/>
+                        <Button Content="Cancel" IsCancel="True" Style="{StaticResource SecondaryButton}" Command="{Binding CancelDebtUpdateCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
+
+        <!-- =================== ADD MEMBER POPUP =================== -->
+        <Popup IsOpen="{Binding IsAddMemberPopupOpen}" StaysOpen="False" Placement="Center" AllowsTransparency="True">
+            <Border BorderBrush="{StaticResource GymGoldBrush}" BorderThickness="2" 
+                    Background="{StaticResource PrimaryBackgroundBrush}" CornerRadius="8" 
+                    Padding="25" MinWidth="300">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="0" Opacity="0.8" Color="Black"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="Add New Member" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"
+                               Foreground="{StaticResource GymGoldBrush}"/>
+                    <TextBlock Text="Full Name:" Foreground="{StaticResource SecondaryTextBrush}" Margin="0,0,0,5"/>
+                    <TextBox Margin="0,5" FontSize="16" Style="{StaticResource SearchBoxStyle}"
+                             Text="{Binding NewMemberFullName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                        <Button Content="Add Member" Margin="0,0,10,0" IsDefault="True"
+                                Style="{StaticResource AccentButton}"
+                                Command="{Binding ConfirmAddMemberCommand}"/>
+                        <Button Content="Cancel" IsCancel="True"
+                                Style="{StaticResource SecondaryButton}"
+                                Command="{Binding CancelAddMemberCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
+
+        <Popup IsOpen="{Binding IsPaymentPopupOpen}" StaysOpen="False" Placement="Center" AllowsTransparency="True">
+            <Border BorderBrush="{StaticResource GymGoldBrush}" BorderThickness="2" 
+                    Background="{StaticResource PrimaryBackgroundBrush}" CornerRadius="8" 
+                    Padding="25" MinWidth="350">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="0" Opacity="0.8" Color="Black"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="Select Payment Plan" FontSize="20" FontWeight="Bold" Margin="0,0,0,5" Foreground="{StaticResource GymGoldBrush}"/>
+                    <TextBlock Text="{Binding SelectedMemberForPayment.FullName}" FontSize="16" Margin="0,0,0,15" Foreground="{StaticResource SecondaryTextBrush}"/>
+
+                    <!-- This ItemsControl will list all available plans -->
+                    <ItemsControl ItemsSource="{Binding PaymentPlans}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource AccentButton}" Margin="0,5"
+                                        Command="{Binding DataContext.ProcessPaymentCommand, RelativeSource={RelativeSource AncestorType=Popup}}"
+                                        CommandParameter="{Binding}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" MinWidth="120"/>
+                                        <TextBlock Text="{Binding Appointments, StringFormat='{}{0} Appointments'}" Margin="15,0" MinWidth="130"/>
+                                        <TextBlock Text="{Binding Price, StringFormat={}{0:C0}, ConverterCulture=sr-RS}" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Button Content="Cancel" Margin="0,20,0,0" HorizontalAlignment="Right"
+                            Style="{StaticResource SecondaryButton}"
+                            Command="{Binding CancelPaymentPopupCommand}"/>
+                </StackPanel>
+            </Border>
+        </Popup>
+    </Grid>
+</mah:MetroWindow>

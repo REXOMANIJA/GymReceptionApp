@@ -1,0 +1,215 @@
+<!-- FILE: Views/MemberInfoWindow.xaml -->
+<mah:MetroWindow x:Class="GymReceptionApp.Views.MemberInfoWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:local="clr-namespace:GymReceptionApp.Views"
+                 xmlns:converters="clr-namespace:GymReceptionApp.Converters"
+                 xmlns:models="clr-namespace:GymReceptionApp.Models"
+                 mc:Ignorable="d"
+                 Title="{Binding Member.FullName, StringFormat='Kalendar - {0}'}" Height="550" Width="500"
+                 WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+                  WindowTitleBrush="{DynamicResource MahApps.Brushes.Window.Background}"
+                 NonActiveWindowTitleBrush="{DynamicResource MahApps.Brushes.Window.Background}"
+                 BorderBrush="Transparent"
+                 BorderThickness="0"
+                 ResizeBorderThickness="10"
+                 GlowBrush="{StaticResource GymGoldBrush}"
+                 TitleForeground="{StaticResource PrimaryTextBrush}"
+                 TitleCharacterCasing="Normal">
+
+  <Window.Resources>
+    <!-- Converters -->
+    <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <converters:MultiParameterConverter x:Key="MultiParamConverter" />
+
+    <!-- Day Status Enum instances for binding -->
+    <models:DayStatus x:Key="StatusNone">None</models:DayStatus>
+    <models:DayStatus x:Key="StatusCheckedIn">CheckedIn</models:DayStatus>
+    <models:DayStatus x:Key="StatusPayDay">PayDay</models:DayStatus>
+    <models:DayStatus x:Key="StatusDebtDay">DebtDay</models:DayStatus>
+    <models:DayStatus x:Key="StatusPaidAndCheckedIn">PaidAndCheckedIn</models:DayStatus>
+
+    <!-- Style for Calendar Day Buttons -->
+    <Style TargetType="Button" x:Key="CalendarDayButton">
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="BorderBrush" Value="Transparent"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="Background" Value="{StaticResource SecondaryBackgroundBrush}"/>
+      <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="5">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource GymGoldBrush}"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+      <!-- Triggers to control BACKGROUND and FOREGROUND colors independently -->
+      <Style.Triggers>
+        <!-- State: CheckedIn -->
+        <DataTrigger Binding="{Binding Status}" Value="CheckedIn">
+          <Setter Property="Background" Value="#28a745" />
+          <!-- Green Background -->
+          <Setter Property="Foreground" Value="White" />
+          <!-- White Text -->
+        </DataTrigger>
+
+        <!-- State: PayDay -->
+        <DataTrigger Binding="{Binding Status}" Value="PayDay">
+          <Setter Property="Background" Value="#FFD700" />
+          <!-- Yellow Background -->
+          <Setter Property="Foreground" Value="Black" />
+          <!-- Black Text -->
+        </DataTrigger>
+
+        <!-- State: DebtDay -->
+        <DataTrigger Binding="{Binding Status}" Value="DebtDay">
+          <Setter Property="Background" Value="#dc3545" />
+          <!-- Red Background -->
+          <Setter Property="Foreground" Value="White" />
+          <!-- White Text -->
+        </DataTrigger>
+
+        <!-- State: Paid AND CheckedIn (The new combined state) -->
+        <DataTrigger Binding="{Binding Status}" Value="PaidAndCheckedIn">
+          <Setter Property="Background" Value="#FFD700" />
+          <!-- Yellow Background -->
+          <Setter Property="Foreground" Value="#28a745" />
+          <!-- Green Text -->
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+
+    <!-- ContextMenu and MenuItem Styles -->
+    <Style TargetType="ContextMenu">
+      <Setter Property="Background" Value="{StaticResource SecondaryBackgroundBrush}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+      <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+    </Style>
+    <Style TargetType="MenuItem">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+      <Setter Property="Padding" Value="10,8"/>
+      <Style.Triggers>
+        <Trigger Property="IsHighlighted" Value="True">
+          <Setter Property="Background" Value="{StaticResource GymGoldBrush}"/>
+          <Setter Property="Foreground" Value="Black"/>
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+  </Window.Resources>
+
+  <Grid Margin="15">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Header and Navigation -->
+    <Grid Grid.Row="0" Margin="0,0,0,15">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <Button Grid.Column="0" Content="&lt;&lt;" Padding="10,5" Command="{Binding ChangeMonthCommand}" CommandParameter="-12"/>
+      <Button Grid.Column="1" Content="&lt;" Padding="10,5" Margin="5,0" Command="{Binding ChangeMonthCommand}" CommandParameter="-1"/>
+      <TextBlock Grid.Column="2" Text="{Binding DisplayedMonth, StringFormat='{}{0:MMMM yyyy}'}"
+                 FontSize="22" FontWeight="Bold" HorizontalAlignment="Center"
+                 Foreground="{StaticResource GymGoldBrush}"/>
+      <Button Grid.Column="3" Content=">" Padding="10,5" Margin="5,0" Command="{Binding ChangeMonthCommand}" CommandParameter="1"/>
+      <Button Grid.Column="4" Content=">>" Padding="10,5" Command="{Binding ChangeMonthCommand}" CommandParameter="12"/>
+    </Grid>
+
+    <!-- Day of Week Headers -->
+    <UniformGrid Grid.Row="1" Rows="1" Columns="7" Margin="0,5">
+      <TextBlock Text="Sun" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Mon" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Tue" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="center"/>
+      <TextBlock Text="Wed" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Thu" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Fri" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+      <TextBlock Text="Sat" FontWeight="Bold" Foreground="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Center"/>
+    </UniformGrid>
+
+    <!-- Calendar Days -->
+    <ItemsControl Grid.Row="2" ItemsSource="{Binding Days}" x:Name="CalendarItemsControl">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <UniformGrid Rows="6" Columns="7"/>
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Button Content="{Binding Day}" IsEnabled="{Binding IsInCurrentMonth}"
+                  Style="{StaticResource CalendarDayButton}" Margin="3"
+                  Visibility="{Binding IsInCurrentMonth, Converter={StaticResource BooleanToVisibilityConverter}}"
+                  Tag="{Binding DataContext, ElementName=CalendarItemsControl}">
+            <Button.ContextMenu>
+              <ContextMenu>
+                <MenuItem Header="Checked In" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                  <MenuItem.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                      <Binding Path="."/>
+                      <Binding Source="{StaticResource StatusCheckedIn}"/>
+                    </MultiBinding>
+                  </MenuItem.CommandParameter>
+                </MenuItem>
+                <MenuItem Header="Pay Day" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                  <MenuItem.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                      <Binding Path="."/>
+                      <Binding Source="{StaticResource StatusPayDay}"/>
+                    </MultiBinding>
+                  </MenuItem.CommandParameter>
+                </MenuItem>
+                <MenuItem Header="Paid and Checked In" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                  <MenuItem.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                      <Binding Path="."/>
+                      <Binding Source="{StaticResource StatusPaidAndCheckedIn}"/>
+                    </MultiBinding>
+                  </MenuItem.CommandParameter>
+                </MenuItem>
+                <MenuItem Header="Debt Day" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                  <MenuItem.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                      <Binding Path="."/>
+                      <Binding Source="{StaticResource StatusDebtDay}"/>
+                    </MultiBinding>
+                  </MenuItem.CommandParameter>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Clear" Command="{Binding PlacementTarget.Tag.SetDayStatusCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                  <MenuItem.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiParamConverter}">
+                      <Binding Path="."/>
+                      <Binding Source="{StaticResource StatusNone}"/>
+                    </MultiBinding>
+                  </MenuItem.CommandParameter>
+                </MenuItem>
+              </ContextMenu>
+            </Button.ContextMenu>
+          </Button>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </Grid>
+</mah:MetroWindow>

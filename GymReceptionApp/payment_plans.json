@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "Basic Plan",
+    "Price": 3000.00,
+    "Appointments": 10
+  },
+  {
+    "Name": "Standard Plan",
+    "Price": 4000.00,
+    "Appointments": 20
+  },
+  {
+    "Name": "Premium Plan",
+    "Price": 5000.00,
+    "Appointments": 30
+  }
+]
